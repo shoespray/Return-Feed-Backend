@@ -112,7 +112,7 @@ class PostNotificationController
                         'type' => $data['type'],
                     ]);
         $user = ReturnUserController::getUserById($data['toUserId']);
-        if(!empty($user->deviceToken) && $user->isNotificationOn){
+        if(!empty($user->deviceToken) && $user->isNotificationOn && $user->isLoggedIn){
             self::sendNotification([
                 'type' => $data['type'],
                 'userPostId' => $data['userPostId'],
@@ -141,12 +141,6 @@ class PostNotificationController
             'notificationIn' => $data['notificationIn'],
             'type' => $data['type'], 
         ]);
-        // if($data['type'] == 'liked'){
-        //     UserPostNotificationLike::create([
-        //         'postNotificationId' => $postPotification, 
-        //         'likedUserId' => $data['userId'],
-        //     ]);
-        // }
     }
 
     public static function sendNotification($data){  
