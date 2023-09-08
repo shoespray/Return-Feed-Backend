@@ -18,6 +18,8 @@
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
         "lcobucci/jwt": "3.3.3",
+        "league/flysystem-aws-s3-v3": "v1.0",
+        "league/flysystem-cached-adapter": "^1.1",
         "mstaack/laravel-postgis": "^6.1",
         "ramsey/uuid": "3.x",
         "tymon/jwt-auth": "^1.0"
