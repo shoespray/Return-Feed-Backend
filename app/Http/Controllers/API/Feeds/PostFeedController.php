@@ -69,6 +69,9 @@ class PostFeedController
             ->whereHas('comments', function ($query) use ($userId) {
                 $query->where('commentedByUserId', '=', $userId);
             })
+            ->whereDoesntHave('reports', function ($query) use ($userId) {
+                $query->where('reportedByUserId', '=', $userId);
+            })
             ->with('profile')->with('community')->with('category')->with('media')
             ->with('likes')->with(array('comments' => function ($query){
                 $query->with('profile');
@@ -82,6 +85,9 @@ class PostFeedController
             ])
             ->whereHas('likes', function ($query) use ($userId) {
                 $query->where('likedByUserId', '=', $userId);
+            })
+            ->whereDoesntHave('reports', function ($query) use ($userId) {
+                $query->where('reportedByUserId', '=', $userId);
             })
             ->with('profile')->with('community')->with('category')->with('media')
             ->with('likes')->with(array('comments' => function ($query){
