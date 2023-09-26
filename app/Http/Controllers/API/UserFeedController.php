@@ -25,7 +25,10 @@ class UserFeedController extends BaseController
 
     public function getLatestFeedPosts($lastUserPostId){
         try{
-            $posts = PostFeedController::getAllLatestPosts($lastUserPostId, auth()->user()->regionId);
+            if(empty($lastUserPostId))
+                $posts = PostFeedController::getAllPosts(auth()->user()->regionId, auth()->id());
+            else 
+                $posts = PostFeedController::getAllLatestPosts($lastUserPostId, auth()->user()->regionId);
             return $this->sendResponse($posts, 'Post returned');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);
