@@ -55,15 +55,15 @@ class PostNotificationController
         $notificationUr = '';
         $notificationIn = '';
 
-        $title = 'New feed notification';
-        $titleAr = 'New feed notification';
-        $titleFr = 'New feed notification';
+        $title = 'New notification';
+        $titleAr = 'إشعار جديد';
+        $titleFr = 'Nouvelle notification';
 
         $profile = ReturnUserProfileController::getUserProfile($data['fromUserId']);
         if($data['type'] == 'commented'){            
             $notification = 'commented on your post';
-            $notificationAr = 'علق على مشاركتك';
-            $notificationFr = 'a commenté sur votre post';
+            $notificationAr = 'أضاف تعليقاً على منشورك';
+            $notificationFr = 'a commenté sur votre publication';
             $notificationUr = 'commented on your post';
             $notificationIn = 'commented on your post';
             $body = $profile->userName.' '.$notification;
@@ -72,8 +72,8 @@ class PostNotificationController
         }
         if($data['type'] == 'liked'){
             $notification = 'liked your post';
-            $notificationAr = 'أحب مشاركتك';
-            $notificationFr = 'a aimé votre post';
+            $notificationAr = 'اضاف اعجاباً على منشورك';
+            $notificationFr = 'a aimé votre publication';
             $notificationUr = 'liked your post';
             $notificationIn = 'liked your post';
             $body = $profile->userName.' '.$notification;
@@ -82,18 +82,18 @@ class PostNotificationController
         }
         if($data['type'] == 'reported'){
             $notification = 'reported your post';
-            $notificationAr = 'أبلغ على مشاركتك';
-            $notificationFr = 'a rapporté votre post';
+            $notificationAr = 'قام بالإبلاغ عن منشورك';
+            $notificationFr = 'a signalé votre publication';
             $notificationUr = 'reported your post';
             $notificationIn = 'reported your post';
             $body = 'Someone '.$notification;
-            $bodyAr = $notificationAr.'شخص ما ';
+            $bodyAr = $notificationAr.'أحدهم ';
             $bodyFr = 'Quelqu\'un '.$notificationFr;
         }
         if($data['type'] == 'approved'){
             $notification = 'Your post was approved';
-            $notificationAr = 'تمت الموافقة على مشاركتك';
-            $notificationFr = 'Votre post a été approuvé';
+            $notificationAr = 'تمت الموافقة على منشورك';
+            $notificationFr = 'Votre publication a été approuvé';
             $notificationUr = 'Your post was approved';
             $notificationIn = 'Your post was approved';
             $body = $notification;
