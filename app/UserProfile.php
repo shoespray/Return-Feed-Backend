@@ -12,7 +12,7 @@ class UserProfile extends Model
     protected $softCascade  = [];
 
     protected $fillable = [
-        'userId', 'userName', 'imageName', 
+        'userId', 'userName', 'imageName', 'isAdmin',
     ];
 
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
