@@ -31,9 +31,11 @@ class ReturnUserProfileController
     public static function updateProfile($data){    
         $profile = [
             'userName' => $data['userName'], 
-            'imageName' => null,
         ];  
-        if(!empty($data['image_base64'])){
+        if($data['isImageRemoved']){
+            $profile['imageName'] = null;
+        }
+        if(!empty($data['image_base64']) && !$data['isImageRemoved']){
             $imageName = FileController::uploadFile($data['image_base64'], "feed/user-".$data['userId']."/profile");
             $profile['imageName'] = $imageName;
         }     
