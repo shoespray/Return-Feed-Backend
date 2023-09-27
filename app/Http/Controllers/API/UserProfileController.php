@@ -43,6 +43,7 @@ class UserProfileController extends BaseController
                 'userId' => auth()->id(),
                 'userName' => $request->userName,
                 'image_base64' => $request->image_base64,
+                'isImageRemoved' => $request->isImageRemoved,
             ]);
             return $this->sendResponse($profile, 'User profile updated');
         } catch (Exception $e) {
