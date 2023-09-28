@@ -20,6 +20,7 @@ class UserProfileValidationController
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'userName' => 'required|string|min:3|max:50',
+            'isImageRemoved' => 'required',
         ]);
         return ValidationResponseController::validationResponse($validator);
     }
