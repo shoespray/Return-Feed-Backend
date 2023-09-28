@@ -43,4 +43,15 @@ class ReturnUserProfileController
                     ->update($profile);
         return self::getUserProfile($data['userId']);
     }
+
+    public static function checkUserName($userName){
+        if(strpos(strtoupper($userName), "NADEERA") !== false || strpos(strtoupper($userName), "YALLARETURN") 
+            || strpos(strtoupper($userName), "YALLA RETURN") !== false){
+            return 'User name cannot';
+        }
+        if(preg_match('/[^a-z_\-0-9]/i', $userName)){
+            return 'cant contain special characters';
+        }
+        return '';
+    }
 }
