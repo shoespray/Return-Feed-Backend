@@ -14,6 +14,10 @@ class ReturnUserProfileController
         return UserProfile::where(['id' => $id, 'userId' => $userId])->first();
     }
 
+    public static function checkIfUserNameExists($userId, $userName){
+        return UserProfile::where('userName', $userName)->where('userId', '<>',$userId)->exists();
+    }
+
     public static function createProfile($data){ 
         $imageName = NULL;
         if(!empty($data['image_base64'])){
@@ -44,13 +48,16 @@ class ReturnUserProfileController
         return self::getUserProfile($data['userId']);
     }
 
-    public static function checkUserName($userName){
+    public static function checkUserName($userId, $userName){
+        if(self::checkIfUserNameExists($userId, $userName)){
+            return 'This username is taken, please choose another one';
+        }
         if(strpos(strtoupper($userName), "NADEERA") !== false || strpos(strtoupper($userName), "YALLARETURN") 
             || strpos(strtoupper($userName), "YALLA RETURN") !== false){
-            return 'User name cannot';
+            return 'This username is taken, please choose another one';
         }
-        if(preg_match('/[^a-z_\-0-9]/i', $userName)){
-            return 'cant contain special characters';
+        if(preg_match('/[^a-z_ \-0-9]/i', $userName)){
+            return 'Username cannot contain special characters. Only letters, spaces, and numbers are allowed';
         }
         return '';
     }
