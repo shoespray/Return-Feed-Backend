@@ -16,7 +16,7 @@ class Region extends Model
         'code', 'name', 'nameAr', 'nameFr', 'nameUr', 'nameIn', 'countryId', 'geolocation', 'geolocationDelta', 'isDeliveryAvailable', 'minNbrOfBags',
         'deliveryOrderNumber', 'hasInspectionModule', 'bagOrderNumber', 'hasSmartBins', 'accountNumber', 'isSmartBinMapShown', 'hasSliders',
         'hasDropOffSchedule', 'isActive', 'canRequestBags', 'canAssignBags', 'showUserQrCode', 'hasPaymentByUserCredits',
-        'hasFeed',
+        'hasFeed', 'isOpen', 'postNumber',
     ];
 
     protected $postgisFields = [

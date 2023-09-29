@@ -78,6 +78,7 @@ class UserFeedController extends BaseController
                         'postCategoryId' => $request->postCategoryId, 
                         'images' => $request->images,
                     ]);
+            //to be commented
             if(!empty($post)){
                 PostNotificationController::addPostNotification([
                     'type' => 'approved',

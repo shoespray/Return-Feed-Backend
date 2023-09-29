@@ -3,6 +3,7 @@ namespace App\Http\Controllers\API\Feeds;
 
 use App\Http\Controllers\API\Feeds\PostMediaController as PostMediaController;
 use App\Http\Controllers\API\Feeds\PostCategoryController as PostCategoryController;
+use App\Http\Controllers\API\Regions\RegionController as RegionController;
 use App\UserPost;
 
 
@@ -97,12 +98,13 @@ class PostFeedController
     }
 
     public static function createPost($data){
+
         $post = UserPost::create([
             'userId' => $data['userId'], 
             'regionId' => $data['regionId'], 
             'postText' => $data['postText'], 
             'status' => 'approved',//'pending', 
-            'postNumber' => 1, 
+            'postNumber' => RegionController::getPostOrderNumber($data['regionId']), 
         ]);
         if(!empty($post)){
             PostMediaController::uploadImages([
