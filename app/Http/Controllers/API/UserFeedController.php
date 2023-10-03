@@ -79,14 +79,14 @@ class UserFeedController extends BaseController
                         'images' => $request->images,
                     ]);
             //to be commented
-            if(!empty($post)){
-                PostNotificationController::addPostNotification([
-                    'type' => 'approved',
-                    'toUserId' => auth()->id(),
-                    'fromUserId' => NULL,
-                    'userPostId' => $post->id,
-                ]);
-            }
+            // if(!empty($post)){
+            //     PostNotificationController::addPostNotification([
+            //         'type' => 'approved',
+            //         'toUserId' => auth()->id(),
+            //         'fromUserId' => NULL,
+            //         'userPostId' => $post->id,
+            //     ]);
+            // }
             return $this->sendResponse($post, 'Post created');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);
