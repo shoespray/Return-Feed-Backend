@@ -109,10 +109,14 @@ class UserFeedController extends BaseController
             $removedImageIds = array();
             if(!empty($request->removedImageIds)){
                 $removedImageIds = explode(',', $request->removedImageIds);
+                $message = PostMediaController::checkIfImagesExist($removedImageIds);
+                if(!empty($message)){
+                    return $this->sendError($message, $message, 400);
+                }
             }
-            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id); 
-            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds);
-            if(!empty($request->images) && count($request->images) > 3){
+            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id);
+            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds); 
+            if($totalImages > 3){
                 return $this->sendError('You can post up to 3 images','You can post up to 3 images', 400);
             }
             $post = PostFeedController::updatePost([
