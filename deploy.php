@@ -32,23 +32,17 @@ task('deploy:secrets', function () {
     upload('.env', get('deploy_path') . '/shared' );
 });
 
-// host('tempStaging')
-// ->setHostname('159.89.98.163') 
-// ->set('branch', 'tempStaging')
-// ->set('remote_user', 'root')
-// ->set('deploy_path', '/var/www/staging/temp-boutiques-users');
-
 host('staging')
 ->setHostname('159.89.98.163') 
 ->set('branch', 'staging')
 ->set('remote_user', 'root')
 ->set('deploy_path', '/var/www/staging/return-feed');
 
-// host('production')
-// ->setHostname('104.248.141.194') 
-// ->set('branch', 'deploy')
-// ->set('remote_user', 'root')
-// ->set('deploy_path', '/var/www/nadeera-boutiques-users');
+host('production')
+->setHostname('104.248.141.194') 
+->set('branch', 'deploy')
+->set('remote_user', 'root')
+->set('deploy_path', '/var/www/return-feed');
 
 //test
 desc('Execute artisan key:generate');

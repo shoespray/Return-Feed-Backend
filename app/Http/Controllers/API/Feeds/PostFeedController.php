@@ -103,7 +103,7 @@ class PostFeedController
             'userId' => $data['userId'], 
             'regionId' => $data['regionId'], 
             'postText' => $data['postText'], 
-            'status' => 'approved',//'pending', 
+            'status' => 'approved', //'pending',
             'postNumber' => RegionController::getPostOrderNumber($data['regionId']), 
         ]);
         if(!empty($post)){
