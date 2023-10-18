@@ -18,6 +18,10 @@ class UserProfileController extends BaseController
             if(!empty(ReturnUserProfileController::getUserProfile(auth()->id()))){
                 return $this->sendError('A profile was already created for this user','A profile was already created for this user', 400);
             }
+            $message = ReturnUserProfileController::checkUserName(auth()->id(), $request->userName);
+            if(!empty($message)){
+                return $this->sendError($message, $message, 400);
+            }
             $profile = ReturnUserProfileController::createProfile([
                 'userId' => auth()->id(),
                 'userName' => $request->userName,
@@ -38,11 +42,16 @@ class UserProfileController extends BaseController
             if(empty(ReturnUserProfileController::getUserProfileById($request->id, auth()->id()))){
                 return $this->sendError('Profile does not exist','Profile does not exist', 400);
             }
+            $message = ReturnUserProfileController::checkUserName(auth()->id(), $request->userName);
+            if(!empty($message)){
+                return $this->sendError($message, $message, 400);
+            }
             $profile = ReturnUserProfileController::updateProfile([
                 'id' => $request->id,
                 'userId' => auth()->id(),
                 'userName' => $request->userName,
                 'image_base64' => $request->image_base64,
+                'isImageRemoved' => $request->isImageRemoved,
             ]);
             return $this->sendResponse($profile, 'User profile updated');
         } catch (Exception $e) {

@@ -12,8 +12,7 @@ class PostRule extends Model
     protected $softCascade  = [];
 
     protected $fillable = [
-        'name', 'nameAr', 'nameFr', 'nameUr', 'nameIn', 'description', 'descriptionAr', 'descriptionFr', 'descriptionUr', 'descriptionIn', 
-        'orderNumber', 'isActive',
+        'name', 'nameAr', 'nameFr', 'nameUr', 'nameIn', 'orderNumber', 'isActive',
     ];
 
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];

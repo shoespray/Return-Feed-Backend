@@ -25,7 +25,10 @@ class UserFeedController extends BaseController
 
     public function getLatestFeedPosts($lastUserPostId){
         try{
-            $posts = PostFeedController::getAllLatestPosts($lastUserPostId, auth()->user()->regionId);
+            if(empty($lastUserPostId))
+                $posts = PostFeedController::getAllPosts(auth()->user()->regionId, auth()->id());
+            else 
+                $posts = PostFeedController::getAllLatestPosts($lastUserPostId, auth()->user()->regionId);
             return $this->sendResponse($posts, 'Post returned');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);
@@ -75,14 +78,15 @@ class UserFeedController extends BaseController
                         'postCategoryId' => $request->postCategoryId, 
                         'images' => $request->images,
                     ]);
-            if(!empty($post)){
-                PostNotificationController::addPostNotification([
-                    'type' => 'approved',
-                    'toUserId' => auth()->id(),
-                    'fromUserId' => NULL,
-                    'userPostId' => $post->id,
-                ]);
-            }
+            //to be commented
+            // if(!empty($post)){
+            //     PostNotificationController::addPostNotification([
+            //         'type' => 'approved',
+            //         'toUserId' => auth()->id(),
+            //         'fromUserId' => NULL,
+            //         'userPostId' => $post->id,
+            //     ]);
+            // }
             return $this->sendResponse($post, 'Post created');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);
@@ -105,10 +109,14 @@ class UserFeedController extends BaseController
             $removedImageIds = array();
             if(!empty($request->removedImageIds)){
                 $removedImageIds = explode(',', $request->removedImageIds);
+                $message = PostMediaController::checkIfImagesExist($removedImageIds);
+                if(!empty($message)){
+                    return $this->sendError($message, $message, 400);
+                }
             }
-            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id); 
-            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds);
-            if(!empty($request->images) && count($request->images) > 3){
+            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id);
+            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds); 
+            if($totalImages > 3){
                 return $this->sendError('You can post up to 3 images','You can post up to 3 images', 400);
             }
             $post = PostFeedController::updatePost([

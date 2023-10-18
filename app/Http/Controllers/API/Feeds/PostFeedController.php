@@ -3,6 +3,7 @@ namespace App\Http\Controllers\API\Feeds;
 
 use App\Http\Controllers\API\Feeds\PostMediaController as PostMediaController;
 use App\Http\Controllers\API\Feeds\PostCategoryController as PostCategoryController;
+use App\Http\Controllers\API\Regions\RegionController as RegionController;
 use App\UserPost;
 
 
@@ -69,6 +70,9 @@ class PostFeedController
             ->whereHas('comments', function ($query) use ($userId) {
                 $query->where('commentedByUserId', '=', $userId);
             })
+            ->whereDoesntHave('reports', function ($query) use ($userId) {
+                $query->where('reportedByUserId', '=', $userId);
+            })
             ->with('profile')->with('community')->with('category')->with('media')
             ->with('likes')->with(array('comments' => function ($query){
                 $query->with('profile');
@@ -83,6 +87,9 @@ class PostFeedController
             ->whereHas('likes', function ($query) use ($userId) {
                 $query->where('likedByUserId', '=', $userId);
             })
+            ->whereDoesntHave('reports', function ($query) use ($userId) {
+                $query->where('reportedByUserId', '=', $userId);
+            })
             ->with('profile')->with('community')->with('category')->with('media')
             ->with('likes')->with(array('comments' => function ($query){
                 $query->with('profile');
@@ -91,12 +98,13 @@ class PostFeedController
     }
 
     public static function createPost($data){
+
         $post = UserPost::create([
             'userId' => $data['userId'], 
             'regionId' => $data['regionId'], 
             'postText' => $data['postText'], 
-            'status' => 'approved', 
-            'postNumber' => 1, 
+            'status' => 'approved', //'pending',
+            'postNumber' => RegionController::getPostOrderNumber($data['regionId']), 
         ]);
         if(!empty($post)){
             PostMediaController::uploadImages([
@@ -117,6 +125,7 @@ class PostFeedController
         UserPost::where('id', $data['id'])
                 ->update([
                     'postText' => $data['postText'], 
+                    'status' => 'approved',//'pending', 
                 ]);
         PostMediaController::uploadImages([
             'userId' => $data['userId'], 
