@@ -155,8 +155,8 @@ task('deploy:writable', function () {
 desc('Deploy the application');
 task('deploy', [
     'deploy:info',
-    'deploy:prepare',
-    'deploy:lock',
+    //'deploy:prepare',
+    //'deploy:lock',
     'deploy:release',
     'rsync',
     'deploy:secrets',
