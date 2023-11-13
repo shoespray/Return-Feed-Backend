@@ -36,6 +36,8 @@ class ReturnUser extends Model implements AuthenticatableContract
     public function country(){
         return $this->belongsTo('App\Country', 'countryId', 'id')
         ->select('id', 'code', 'name', 'nameAr', 'nameFr', 'nameUr', 'nameIn','hasCommunities', 'isTransferCreditsEnabled', 
-                'hasBanner', 'hasInAppPayment', 'hasCashPayment', 'hasDebitCreditPayment', 'hasCollectedFromStores');
+                'hasBanner', 'hasInAppPayment', 'hasCashPayment', 'hasDebitCreditPayment', 'hasCollectedFromStores',
+                'showUserPhoneNumber', 'hasNewBanner', 'instagramLink', 'facebookLink', 'youtubeLink', 'twitterLink', 'linkedInLink',
+                'isStoreActive');
     }
 }
