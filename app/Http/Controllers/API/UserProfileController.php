@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\Validations\UserProfileValidationController as UserProfileValidationController;
 use App\Http\Controllers\API\ReturnUsers\ReturnUserProfileController as ReturnUserProfileController;
+use App\Http\Controllers\API\OfflineUsers\OfflineUsersController as OfflineUsersController;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -22,11 +23,13 @@ class UserProfileController extends BaseController
             if(!empty($message)){
                 return $this->sendError($message, $message, 400);
             }
+            $accountUser = OfflineUsersController::getOfflineUserByUserId(auth()->id());
             $profile = ReturnUserProfileController::createProfile([
                 'userId' => auth()->id(),
                 'userName' => $request->userName,
                 'image_base64' => $request->image_base64,
-            ]);
+                'isAdmin' => !empty($accountUser) ? $accountUser->isAdmin : false,
+            ]); 
             return $this->sendResponse($profile, 'User profile created');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);

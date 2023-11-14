@@ -28,6 +28,7 @@ class ReturnUserProfileController
         ],
         [
             'userName' => $data['userName'], 
+            'isAdmin' => $data['isAdmin'], 
             'imageName' => $imageName, 
         ]);
     }
