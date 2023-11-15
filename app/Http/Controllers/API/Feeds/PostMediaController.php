@@ -31,6 +31,14 @@ class PostMediaController
         ]);
     }
     
+    public static function checkIfImagesExist($imageIds){ 
+        foreach($imageIds as $imageId){
+            if(!UserPostMedia::where('id', $imageId)->exists()){
+                return "Image does not exist";
+            }
+        }        
+        return '';
+    }
 
     public static function removePhotos($image_ids){
         foreach($image_ids as $image_id){

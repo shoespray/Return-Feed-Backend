@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\Validations\UserPostValidationController as UserPostValidationController;
 use App\Http\Controllers\API\ReturnUsers\ReturnUserProfileController as ReturnUserProfileController;
+use App\Http\Controllers\API\OfflineUsers\OfflineUsersController as OfflineUsersController;
 use App\Http\Controllers\API\Feeds\PostFeedController as PostFeedController;
 use App\Http\Controllers\API\Feeds\PostMediaController as PostMediaController;
 use App\Http\Controllers\API\Feeds\PostNotificationController as PostNotificationController;
@@ -71,22 +72,19 @@ class UserFeedController extends BaseController
             if(!empty($request->images) && count($request->images) > 3){
                 return $this->sendError('You can post up to 3 images','You can post up to 3 images', 400);
             }
+            $status = 'pending';
+            $accountUser = OfflineUsersController::getOfflineUserByUserId(auth()->id());
+            if(!empty($accountUser) && $accountUser->isAdmin){
+                $status = 'approved';
+            }
             $post = PostFeedController::createPost([
                         'userId' => auth()->id(), 
                         'regionId' => auth()->user()->regionId, 
                         'postText' => $request->postText, 
                         'postCategoryId' => $request->postCategoryId, 
+                        'status' => $status,
                         'images' => $request->images,
                     ]);
-            //to be commented
-            // if(!empty($post)){
-            //     PostNotificationController::addPostNotification([
-            //         'type' => 'approved',
-            //         'toUserId' => auth()->id(),
-            //         'fromUserId' => NULL,
-            //         'userPostId' => $post->id,
-            //     ]);
-            // }
             return $this->sendResponse($post, 'Post created');
         } catch (Exception $e) {
             return $this->sendError('Exception', $e->getMessage(), 400);
@@ -105,14 +103,22 @@ class UserFeedController extends BaseController
             if(empty(PostFeedController::getUserPostById($request->id, auth()->id()))){
                 return $this->sendError('Post does not exist','Post does not exist', 400);
             }
-
+            $status = 'pending';
+            $accountUser = OfflineUsersController::getOfflineUserByUserId(auth()->id());
+            if(!empty($accountUser) && $accountUser->isAdmin){
+                $status = 'approved';
+            }
             $removedImageIds = array();
             if(!empty($request->removedImageIds)){
                 $removedImageIds = explode(',', $request->removedImageIds);
+                $message = PostMediaController::checkIfImagesExist($removedImageIds);
+                if(!empty($message)){
+                    return $this->sendError($message, $message, 400);
+                }
             }
-            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id); 
-            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds);
-            if(!empty($request->images) && count($request->images) > 3){
+            $totalUploadedImages = PostMediaController::getTotalUploadedImages($request->id);
+            $totalImages = count($request->images) + $totalUploadedImages - count($removedImageIds); 
+            if($totalImages > 3){
                 return $this->sendError('You can post up to 3 images','You can post up to 3 images', 400);
             }
             $post = PostFeedController::updatePost([
@@ -120,6 +126,7 @@ class UserFeedController extends BaseController
                         'userId' => auth()->id(), 
                         'postText' => $request->postText, 
                         'postCategoryId' => $request->postCategoryId, 
+                        'status' => $status,
                         'images' => $request->images,
                         'removedImageIds' => $removedImageIds,
                     ]);
