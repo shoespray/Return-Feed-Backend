@@ -103,7 +103,7 @@ class PostFeedController
             'userId' => $data['userId'], 
             'regionId' => $data['regionId'], 
             'postText' => $data['postText'], 
-            'status' => 'approved', //'pending',
+            'status' => 'pending',//approved
             'postNumber' => RegionController::getPostOrderNumber($data['regionId']), 
         ]);
         if(!empty($post)){
@@ -125,7 +125,7 @@ class PostFeedController
         UserPost::where('id', $data['id'])
                 ->update([
                     'postText' => $data['postText'], 
-                    'status' => 'approved',//'pending', 
+                    'status' => 'pending', //approved
                 ]);
         PostMediaController::uploadImages([
             'userId' => $data['userId'], 
